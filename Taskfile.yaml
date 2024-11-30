@@ -1,0 +1,64 @@
+version: '3'
+
+dotenv: [ '.env' ]
+
+tasks:
+  default:
+    desc: "Show available tasks"
+    cmds:
+    - task --list
+
+  build:
+    desc: "Build the dotnet project"
+    cmds:
+    - dotnet build
+
+  dev:
+    desc: "Run the dotnet project in development mode"
+    cmds:
+    - dotnet watch
+
+  run:
+    desc: "Run the dotnet project"
+    cmds:
+    - dotnet run
+
+  test:
+    desc: "Run the dotnet tests"
+    cmds:
+    - dotnet test
+
+  build-image:
+    desc: "Build the Docker image"
+    cmds:
+    - $CONTAINER_RUNTIME build -t $IMAGE_NAME .
+
+  start-cluster:
+    desc: "Start the kind cluster"
+    cmds:
+    - kind create cluster --name $KIND_CLUSTER_NAME
+
+  delete-cluster:
+    desc: "Delete the kind cluster"
+    cmds:
+    - kind delete cluster --name $KIND_CLUSTER_NAME
+
+  load-image:
+    desc: "Load the Docker image into the kind cluster"
+    cmds:
+    - kind load docker-image $IMAGE_NAME --name $KIND_CLUSTER_NAME
+
+  install-crd:
+    desc: "Install the CRD"
+    cmds:
+    - dotnet run install
+
+  create-entity:
+    desc: "Create a DemoEntity"
+    cmds:
+    - kubectl apply -f demo-entity.yaml
+
+  delete-entity:
+    desc: "Delete a DemoEntity"
+    cmds:
+    - kubectl delete -f demo-entity.yaml
